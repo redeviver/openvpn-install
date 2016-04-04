@@ -73,11 +73,11 @@ else
 	echo 'Welcome to this quick OpenVPN "road warrior" installer'
 	IP=$IP
 	PORT=1194
-    DNS=1
+	DNS=1
 	CLIENT="$(hostname)"
 	IPRANGE="10.88.88.0"
-	IPNETMASK="$IPNETMASK"
-	IPCIDR='$IPCIDR'
+	IPNETMASK="255.255.255.0"
+	IPCIDR='/24'
 		if [[ "$OS" = 'debian' ]]; then
 		apt-get update
 		apt-get install openvpn iptables openssl ca-certificates -y
