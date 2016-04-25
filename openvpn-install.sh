@@ -182,7 +182,8 @@ else
 	echo "   3) OpenDNS"
 	echo "   4) NTT"
 	echo "   5) Hurricane Electric"
-	echo "   6) You specify the DNS server IP-s"
+	echo "   6) Verisign"
+	echo "   7) You specify the DNS server IP-s"
         read -p "DNS [1-6]: " -e -i 1 DNS
         if [[ "$DNS" = '6' ]]; then
                 echo "Please leave a space between DNS IP entries"
@@ -263,7 +264,11 @@ ifconfig-pool-persist ipp.txt" > /etc/openvpn/server.conf
 		5) 
 		echo 'push "dhcp-option DNS 74.82.42.42"' >> /etc/openvpn/server.conf
 		;;
-		6)
+ 		6) 
+		echo 'push "dhcp-option DNS 64.6.64.6"' >> /etc/openvpn/server.conf
+		echo 'push "dhcp-option DNS 64.6.65.6"' >> /etc/openvpn/server.conf
+		;;
+		7)
 		for i in `echo $OWNDNS|tr " " "\n"`;
                 	do
 				echo 'push "dhcp-option DNS '"$i"'"' >> /etc/openvpn/server.conf
