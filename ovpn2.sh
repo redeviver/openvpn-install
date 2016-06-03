@@ -16,19 +16,19 @@ fi
 
 if [[ "$EUID" -ne 0 ]]; then
 	echo "Sorry, you need to run this as root"
-	exit 1
+	exit 2 
 fi
 
 
 if [[ ! -e /dev/net/tun ]]; then
 	echo "TUN is not available"
-	exit 2
+	exit 3
 fi
 
 
 if grep -qs "CentOS release 5" "/etc/redhat-release"; then
 	echo "CentOS 5 is too old and not supported"
-	exit 3
+	exit 4
 fi
 
 if [[ -e /etc/debian_version ]]; then
@@ -43,7 +43,7 @@ elif [[ -e /etc/centos-release || -e /etc/redhat-release ]]; then
 	chmod +x /etc/rc.d/rc.local
 else
 	echo "Looks like you aren't running this installer on a Debian, Ubuntu or CentOS system"
-	exit 4
+	exit 5
 fi
 
 newclient () {
