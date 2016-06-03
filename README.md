@@ -6,15 +6,54 @@ This script will let you setup your own VPN server in no more than a minute, eve
 ###Installation
 Run the script and follow the assistant:
 
-`wget https://git.io/vpn -O openvpn-install.sh && bash openvpn-install.sh`
+```
+git clone -o github https://github.com/richardskumat/openvpn-install
+bash -x openvpn-install/openvpn-install.sh
+```
+
+An automated version of the script is ovpn2.sh.
+
+It defines a few variables in the following values:
+
+```
+IP=$IP
+PORT=1194
+DNS=1
+CLIENT="$(hostname)"
+IPRANGE="10.88.88.0"
+IPNETMASK="255.255.255.0"
+IPCIDR='/24'
+```
+
+Explanation:
+
+```
+IP=your external public, the result of wget going to ipv4.icanhazip.com
+PORT=1194, the default value in the manual script
+DNS=1, the first choice in the "What DNS do you want to use with the VPN" question.
+CLIENT=by default is set to the hostname of the server, such as "ip-172-22-23-24" for example on AWS VM-s.
+IPRANGE=10.88.88.0, a different range from the default values in the manual script.
+IPNETMASK=255.255.255.0 is the value of a /24 IP range, so 10.88.88.0-10.88.88.255
+IPCIDR=/24 by default
+```
+
+after the:
+
+```
+echo 'Welcome to this quick OpenVPN "road warrior" installer'
+```
+
+line.
 
 Once it ends, you can run it again to add more users, remove some of them or even completely uninstall OpenVPN.
 
 ###I want to run my own VPN but don't have a server for that
 You can get a little VPS for just $2/month at [Host1Plus](https://affiliates.host1plus.com/ref/nyr.html).
 
+Other cheap hosts can be found on http://lowendtalk.com, but be careful about selecting your hosts.
+
 If you don't care about sharing an IP address with more people, check out the awesome [LowEndSpirit](http://lowendspirit.com/) project too. They are providing IPv6 VPS with NATed IPv4 for only 3€/year.
 
 ###Donations
 
-If you want to show your appreciation, you can donate via [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=VBAYDL34Z7J6L) or [Bitcoin](https://www.coinbase.com/Nyr). Thanks!
+If you want to show your appreciation, you can donate via [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=VBAYDL34Z7J6L) or [Bitcoin](https://www.coinbase.com/Nyr) to Nyr.

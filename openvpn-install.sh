@@ -7,6 +7,12 @@
 # your Debian/Ubuntu/CentOS box. It has been designed to be as unobtrusive and
 # universal as possible.
 
+# Detect Debian users running the script with "sh" instead of bash
+if readlink /proc/$$/exe | grep -qs "dash"; then
+	echo "This script needs to be run with bash, not sh"
+ 	exit 1
+fi
+
 
 if [[ "$EUID" -ne 0 ]]; then
 	echo "Sorry, you need to run this as root"
@@ -27,9 +33,11 @@ fi
 
 if [[ -e /etc/debian_version ]]; then
 	OS=debian
+	GROUPNAME=nogroup
 	RCLOCAL='/etc/rc.local'
 elif [[ -e /etc/centos-release || -e /etc/redhat-release ]]; then
 	OS=centos
+	GROUPNAME=nobody
 	RCLOCAL='/etc/rc.d/rc.local'
 	# Needed for CentOS 7
 	chmod +x /etc/rc.d/rc.local
@@ -50,6 +58,9 @@ newclient () {
 	echo "<key>" >> ~/$1.ovpn
 	cat /etc/openvpn/easy-rsa/pki/private/$1.key >> ~/$1.ovpn
 	echo "</key>" >> ~/$1.ovpn
+ 	echo "<tls-auth>" >> ~/$1.ovpn
+	cat /etc/openvpn/ta.key >> ~/$1.ovpn
+	echo "</tls-auth>" >> ~/$1.ovpn
 }
 
 
@@ -114,6 +125,8 @@ if [[ -e /etc/openvpn/server.conf ]]; then
 			rm -rf pki/issued/$CLIENT.crt
 			rm -rf /etc/openvpn/crl.pem
 			cp /etc/openvpn/easy-rsa/pki/crl.pem /etc/openvpn/crl.pem
+			# CRL.pem is read with each client connection, when OpenVPN is dropped to nobody
+			chown nobody:$GROUPNAME /etc/openvpn/crl.pem
 			echo ""
 			echo "Certificate for client $CLIENT revoked"
 			exit
@@ -227,6 +240,10 @@ else
 	./easyrsa gen-crl
 	# Move the stuff we need
 	cp pki/ca.crt pki/private/ca.key pki/dh.pem pki/issued/server.crt pki/private/server.key /etc/openvpn/easy-rsa/pki/crl.pem /etc/openvpn
+ 	# CRL.pem is read with each client connection, when OpenVPN is dropped to nobody
+	chown nobody:$GROUPNAME /etc/openvpn/crl.pem
+  	# Generate key for tls-auth
+ 	openvpn --genkey --secret /etc/openvpn/ta.key
 	# Generate server.conf
 	echo "port $PORT
 proto udp
@@ -237,6 +254,7 @@ ca ca.crt
 cert server.crt
 key server.key
 dh dh.pem
+tls-auth ta.key 0
 topology subnet
 server 10.8.0.0 255.255.255.0
 ifconfig-pool-persist ipp.txt" > /etc/openvpn/server.conf
@@ -276,7 +294,10 @@ ifconfig-pool-persist ipp.txt" > /etc/openvpn/server.conf
                 ;;
 	esac
 	echo "keepalive 10 120
+cipher AES-128-CBC
 comp-lzo
+user nobody
+group $GROUPNAME
 persist-key
 persist-tun
 status openvpn-status.log
@@ -371,8 +392,11 @@ resolv-retry infinite
 nobind
 persist-key
 persist-tun
+cipher AES-128-CBC
 remote-cert-tls server
 comp-lzo
+setenv opt block-outside-dns
+key-direction 1
 verb 3" > /etc/openvpn/client-common.txt
 	# Generates the custom client.ovpn
 	newclient "$CLIENT"
