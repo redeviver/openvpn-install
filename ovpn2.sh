@@ -135,7 +135,7 @@ key server.key
 dh dh.pem
 tls-auth ta.key 0
 topology subnet
-server $IPRANGE $IPNETMASK
+server 10.8.0.0 255.255.255.0
 ifconfig-pool-persist ipp.txt" > /etc/openvpn/server.conf
 	echo 'push "redirect-gateway def1 bypass-dhcp"' >> /etc/openvpn/server.conf
 	# DNS
