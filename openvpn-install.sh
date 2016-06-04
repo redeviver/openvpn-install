@@ -197,8 +197,8 @@ else
 	echo "   5) Hurricane Electric"
 	echo "   6) Verisign"
 	echo "   7) You specify the DNS server IP-s"
-        read -p "DNS [1-6]: " -e -i 1 DNS
-        if [[ "$DNS" = '6' ]]; then
+        read -p "DNS [1-7]: " -e -i 1 DNS
+        if [[ "$DNS" = '7' ]]; then
                 echo "Please leave a space between DNS IP entries"
 		echo "Example: 8.8.8.8 8.8.4.4 129.250.35.250"
                 read -e -p "Specify the DNS server IP-s. Space is the separator: " OWNDNS
