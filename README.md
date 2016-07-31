@@ -47,13 +47,3 @@ line.
 
 Once it ends, you can run it again to add more users, remove some of them or even completely uninstall OpenVPN.
 
-###I want to run my own VPN but don't have a server for that
-You can get a little VPS for just $2/month at [Host1Plus](https://affiliates.host1plus.com/ref/nyr.html).
-
-Other cheap hosts can be found on http://lowendtalk.com, but be careful about selecting your hosts.
-
-If you don't care about sharing an IP address with more people, check out the awesome [LowEndSpirit](http://lowendspirit.com/) project too. They are providing IPv6 VPS with NATed IPv4 for only 3€/year.
-
-###Donations
-
-If you want to show your appreciation, you can donate via [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=VBAYDL34Z7J6L) or [Bitcoin](https://www.coinbase.com/Nyr) to Nyr.
